@@ -1,7 +1,5 @@
 # MostWanted_JavaScript
-# You have been contracted to build a prototype for a person-searching application for a top-secret government project. 
-# You have been given access to an array of objects representing individuals. The prototype should just use window.prompt and window.alert for the User Interface (UI). 
-# Although this isn’t typical in production, you may use only three files for this project: an HTML file and two JavaScript files -- One JavaScript file for the 
-# application and one JavaScript file containing the data for the application.
+# project will challenge you to build your first JavaScript application by utilizing built-in methods like prompt(), alert(), map(), and filter(). 
+# This is a project with a lot of working starter code, but there are a few areas in the code you will need to solve using your own functions.
 
 # 💡 Do NOT change any code inside of the data.js file – all of your code will be written inside of the app.js file!
