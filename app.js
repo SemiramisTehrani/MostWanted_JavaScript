@@ -78,11 +78,15 @@ function mainMenu(person, people) {
             let personInfo = displayPerson(person[0]);
             alert(personInfo);
             break;
+
         case "family":
             //! TODO #2: Declare a findPersonFamily function //////////////////////////////////////////
             // HINT: Look for a people-collection stringifier utility function to help
             let personFamily = findPersonFamily(person[0], people);
+            console.log(personFamily);
             alert(personFamily);
+            
+        
             break;
         case "descendants":
             //! TODO #3: Declare a findPersonDescendants function //////////////////////////////////////////
@@ -211,39 +215,78 @@ function chars(input) {
 //  findPersonFamily(person[0], people);
 //   parents, siblings , spouse , Children
 
-function findParents(person, people) {
-    let newArray = people.filter(function(el) {
-        if((person.parents).includes(el.id)) {
-          return true;
-        }
-    });
-    return newArray;
-  }
 
-  function findSiblings(person, people) {
-    let newArray = people.filter(function (el) {
-      for (let i = 0; i < (el.parents).length; i++) {
-        if(person == el) {
-          return false;
-        };
-        if(person.parents.includes(el.parents[i]) ) {
-          return true;
-      };
-    };
-    });
-    return newArray[0];
-  }
 
-function findSpouse(person, people) {
-    let newArray = people.filter(function(el) {
-      if (el.currentSpouse == person.id) {
+function findSiblings(person, people) {
+  let newArray = people.filter(function (el) {
+      if (person.id == el.id){
+      return false;
+    }
+      if(person.parents.includes(el.parents[0]) || person.parents.includes(el.parents[1]) ) {
         return true;
-      }
-    });
-    return newArray;
+  };
+})
+  return newArray;
 }
 
-function findChildren(person, people) {
+
+function findSpouse(person, people) {
+  let newArray = people.filter(function(el) {
+    if (el.currentSpouse == person.id) {
+      return true;
+    }
+  });
+  return newArray;
+}
+
+function findParents(person, people) {
+  let newArray = people.filter(function(el) {
+      if((person.parents).includes(el.id)) {
+        return true;
+      }
+  });
+  return newArray;
+}
+
+function findPersonFamily (person, people) {
+  let newArray = "";
+  let siblings = findSiblings(person, people);
+  let spouse = findSpouse(person, people);
+  let parents = findParents(person, people);
+
+  if (siblings != null) {
+    for(let i = 0; i < siblings.length; i ++){
+      newArray += `sibling: ${siblings[i].firstName} ${siblings[i].lastName}\n`
+    }
+  }
+
+  if (spouse != null) {
+    for(let i = 0; i < spouse.length; i ++){
+      newArray += `spouse: ${spouse[i].firstName} ${spouse[i].lastName}\n`
+    }
+  }
+
+  if (parents != null) {
+    for(let i = 0; i < parents.length; i ++) {
+      newArray += `parents: ${parents[i].firstName} ${parents[i].lastName}\n`
+    }
+  }
+
+  return newArray;
+}
+
+   //! TODO #3: Declare a findPersonDescendants function //////////////////////////////////////////
+   //  findPersonDescendants(person[0], people);
+
+   function findPersonDescendants(person, people) {
+    let descendants = findChildren(person, people);
+    for(let i = 0; i < descendants.length; i++) {
+      descendants = descendants.concat(findPersonDescendants(descendants[i], people));
+    }
+    return descendants;
+  }
+
+  function findChildren(person, people) {
     let newArray = people.filter(function(el) {
       for (let i = 0; i < el.parents.length; i++)
         if(el.parents[i] == person.id ) {
@@ -252,53 +295,3 @@ function findChildren(person, people) {
     });
     return newArray;
   }
-
-  function findPersonFamily(person, people); 
-  let newArray = [];
-  let siblings = findSiblings(person, people);
-  let children = findChildren(person, people);
-  let spouse = findSpouse(person, people);
-  let parents = findParents(person, people);
-
-  if (siblings != null) {
-    for(let i = 0; i < siblings.length; i ++){
-      newArray.push(siblings[i]);
-    }
-  }
-
-  if (children != null) {
-    for(let i = 0; i < children.length; i ++){
-      newArray.push(children[i]);
-      }
-    }
-
-  if (spouse != null) {
-    for(let i = 0; i < spouse.length; i ++){
-    newArray.push(spouse[i]);
-    }
-  }
-
-  if (parents != null) {
-    for(let i = 0; i < parents.length; i ++) {
-      newArray.push(parents[i]);
-    }
-  }
-
-  return newArray;
-
-
-
-
-
-   //! TODO #3: Declare a findPersonDescendants function //////////////////////////////////////////
-   //  findPersonDescendants(person[0], people);
-
-   function findPersonDescendants(person, people) {
-    let descendants = findChildren(person, people);
-    for(let i = 0; i < descendants.length; i++) {
-      descendants = descendants.concat(findDescendants(descendants[i], people));
-    }
-    return descendants;
-  }
-
-  
