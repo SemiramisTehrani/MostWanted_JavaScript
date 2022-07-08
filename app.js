@@ -5,7 +5,8 @@
 / Semi 
 / 7/7/2022 : reviwing the code
 / 7/8/2022 : running the code in inspect
-
+/            ! TODO #1 : added lines in Function displayPerson , tested & is workin to provide all person's info
+             ! TODO #2 :
 //////////////////////////////////////////* Beginning Of Starter Code *//////////////////////////////////////////
 
 "use strict";
@@ -73,6 +74,7 @@ function mainMenu(person, people) {
         case "info":
             //! TODO #1: Utilize the displayPerson function //////////////////////////////////////////
             // HINT: Look for a person-object stringifier utility function to help
+            // Semi : added lines in Function displayPerson , tested & is working
             let personInfo = displayPerson(person[0]);
             alert(personInfo);
             break;
@@ -202,3 +204,101 @@ function chars(input) {
 
 //////////////////////////////////////////* End Of Starter Code *//////////////////////////////////////////
 // Any additional functions can be written below this line 👇. Happy Coding! 😁
+
+// added by Semi
+
+//! TODO #2: Declare a findPersonFamily function ////////////////////////////////////////// --> is it supposed to be one function?
+//  findPersonFamily(person[0], people);
+//   parents, siblings , spouse , Children
+
+function findParents(person, people) {
+    let newArray = people.filter(function(el) {
+        if((person.parents).includes(el.id)) {
+          return true;
+        }
+    });
+    return newArray;
+  }
+
+  function findSiblings(person, people) {
+    let newArray = people.filter(function (el) {
+      for (let i = 0; i < (el.parents).length; i++) {
+        if(person == el) {
+          return false;
+        };
+        if(person.parents.includes(el.parents[i]) ) {
+          return true;
+      };
+    };
+    });
+    return newArray[0];
+  }
+
+function findSpouse(person, people) {
+    let newArray = people.filter(function(el) {
+      if (el.currentSpouse == person.id) {
+        return true;
+      }
+    });
+    return newArray;
+}
+
+function findChildren(person, people) {
+    let newArray = people.filter(function(el) {
+      for (let i = 0; i < el.parents.length; i++)
+        if(el.parents[i] == person.id ) {
+          return true;
+      }
+    });
+    return newArray;
+  }
+
+  function findPersonFamily(person, people); 
+  let newArray = [];
+  let siblings = findSiblings(person, people);
+  let children = findChildren(person, people);
+  let spouse = findSpouse(person, people);
+  let parents = findParents(person, people);
+
+  if (siblings != null) {
+    for(let i = 0; i < siblings.length; i ++){
+      newArray.push(siblings[i]);
+    }
+  }
+
+  if (children != null) {
+    for(let i = 0; i < children.length; i ++){
+      newArray.push(children[i]);
+      }
+    }
+
+  if (spouse != null) {
+    for(let i = 0; i < spouse.length; i ++){
+    newArray.push(spouse[i]);
+    }
+  }
+
+  if (parents != null) {
+    for(let i = 0; i < parents.length; i ++) {
+      newArray.push(parents[i]);
+    }
+  }
+
+  return newArray;
+
+
+
+
+
+   //! TODO #3: Declare a findPersonDescendants function //////////////////////////////////////////
+   //  findPersonDescendants(person[0], people);
+
+   function findPersonDescendants(person, people) {
+    let descendants = findChildren(person, people);
+    for(let i = 0; i < descendants.length; i++) {
+      descendants = descendants.concat(findDescendants(descendants[i], people));
+    }
+    return descendants;
+  }
+
+  
