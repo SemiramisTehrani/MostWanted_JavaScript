@@ -1,7 +1,11 @@
 /*
     Author: devCodeCamp
     Description: Most Wanted Starter Code
-*/
+/ 
+/ Semi 
+/ 7/7/2022 : reviwing the code
+/ 7/8/2022 : running the code in inspect
+
 //////////////////////////////////////////* Beginning Of Starter Code *//////////////////////////////////////////
 
 "use strict";
@@ -42,6 +46,9 @@ function app(people) {
     mainMenu(searchResults, people);
 }
 // End of app()
+
+
+
 
 /**
  * After finding a single person, we pass in the entire person-object that we found,
@@ -139,8 +146,19 @@ function displayPeople(people) {
  */
 function displayPerson(person) {
     let personInfo = `First Name: ${person.firstName}\n`;
-    personInfo += `Last Name: ${person.lastName}\n`;
+    personInfo += `Last Name:     ${person.lastName}\n`;
+
     //! TODO #1a: finish getting the rest of the information to display //////////////////////////////////////////
+    //
+    // added by Semi 
+    //
+    personInfo += `Gender:        ${person.gender}\n`;
+    personInfo += `DOB:           ${person.dob}\n`;
+    personInfo += `Height:        ${person.height}\n`;
+    personInfo += `Weight:        ${person.weight}\n`;
+    personInfo += `EyeColor:      ${person.eyeColor}\n`;
+    personInfo += `Occupation:   ${person.occupation}\n`;
+    
     alert(personInfo);
 }
 // End of displayPerson()
