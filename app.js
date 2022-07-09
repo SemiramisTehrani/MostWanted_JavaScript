@@ -6,7 +6,11 @@
 / 7/7/2022 : reviwing the code
 / 7/8/2022 : running the code in inspect
 /            ! TODO #1 : added lines in Function displayPerson , tested & is workin to provide all person's info
-             ! TODO #2 :
+             ! TODO #2 : Nevin helped with fixing bugs in findPersonFamily function and nested functions , tested & working.
+             ! TODO #3 : Asked Nevin's feedback , doesn't  print the entire text.
+             ! TODO #4 : add lines of codes and fucntions for single traits but not tested yet
+
+
 //////////////////////////////////////////* Beginning Of Starter Code *//////////////////////////////////////////
 
 "use strict";
@@ -92,8 +96,12 @@ function mainMenu(person, people) {
             //! TODO #3: Declare a findPersonDescendants function //////////////////////////////////////////
             // HINT: Review recursion lecture + demo for bonus user story
             let personDescendants = findPersonDescendants(person[0], people);
+            console.log(personDescendants);
             alert(personDescendants);
+            //alert(person[0].firstName + " " + person[0].lastName + "'s descendants: \n\n" + displayPeople(personDescendants));
             break;
+
+
         case "restart":
             // Restart app() from the very beginning
             app(people);
@@ -249,7 +257,7 @@ function findParents(person, people) {
 }
 
 function findPersonFamily (person, people) {
-  let newArray = "";
+  let newArray = "";                         // HTML only understands string !
   let siblings = findSiblings(person, people);
   let spouse = findSpouse(person, people);
   let parents = findParents(person, people);
@@ -278,15 +286,7 @@ function findPersonFamily (person, people) {
    //! TODO #3: Declare a findPersonDescendants function //////////////////////////////////////////
    //  findPersonDescendants(person[0], people);
 
-   function findPersonDescendants(person, people) {
-    let descendants = findChildren(person, people);
-    for(let i = 0; i < descendants.length; i++) {
-      descendants = descendants.concat(findPersonDescendants(descendants[i], people));
-    }
-    return descendants;
-  }
-
-  function findChildren(person, people) {
+   function findChildren(person, people) {
     let newArray = people.filter(function(el) {
       for (let i = 0; i < el.parents.length; i++)
         if(el.parents[i] == person.id ) {
@@ -295,3 +295,179 @@ function findPersonFamily (person, people) {
     });
     return newArray;
   }
+
+   function findPersonDescendants(person, people) {
+    let descendants = findChildren(person, people);
+    for(let i = 0; i < descendants.length; i++) {
+      descendants = descendants.concat(findPersonDescendants(descendants[i], people));
+    }
+    return descendants;
+  }
+
+ 
+
+
+  //! TODO #4: Declare a searchByTraits (multiple traits) function //////////////////////////////////////////
+  //! TODO #4a: Provide option to search for single or multiple //////////////////////////////////////////
+  // searchResults = searchByTraits(people);
+
+ // single trait : gender , dob , height , weaigh , eye color , occupation 
+
+ function searchByTrait(people){    
+  let input = promptFor("Which trait would you like to search by?\n1: Gender\n2: Height\n3: Weight\n4: Eye Color\n5: Occupation\n6: DOB\n7: IDK Restart?",integers);
+  let foundPeople = [];
+  switch(input){
+    case"1"://gender           
+        foundPeople = genderSearch(people);     
+      break;
+    case "2"://DOB      
+      foundPeople = getAge(people);      
+      break;
+    case "3"://height      
+        foundPeople = getHeight(people);      
+      break;
+    case "4"://weight     
+        foundPeople = getWeight(people);      
+      break;
+    case "5"://eye color      
+        foundPeople = getEyes(people);      
+        break;
+    case "6"://occupation      
+        foundPeople = getOccupation(people);      
+        break;
+    
+    case "7"://restart
+        app(people); 
+        break;
+    default:
+      alert("Enter valid selection.");
+      return searchByTrait(people);
+  }
+    if (foundPeople.length > 1) {
+      displayPeople(foundPeople);
+      searchByTrait(foundPeople)
+    } else if (foundPeople.length === 1) {
+      let foundPerson = foundPeople[0];
+      mainMenu(foundPerson, people);
+    } else {
+      app(people);
+    }
+}
+
+
+
+
+
+ // unversal function to prompt no result if criteria doesnt match for all below functions
+ function noResults(){
+  alert("Could not find a trait match!");
+ }
+
+
+
+
+
+
+
+
+
+
+
+
+ // age : searching function  
+ function getAge(people){
+  let userChoice = promptFor("What is the person's date of birth? \n Format: MM/DD/YYY",integers);
+    userChoice = ageFinder(userChoice);
+  let foundPeople = people.filter(function(el){
+    if(ageFinder(el.dob) == userChoice){
+      return true;
+    }});
+  if(foundPeople=== undefined || foundPeople.length ===0){
+    noResults();
+    return app(people);
+  }
+  return foundPeople;
+}
+
+//function : converts DOB into age integer.
+ function ageFinder(dob){
+  var today = new Date();
+  var birthDate = new Date(dob);
+  var age = today.getFullYear() - birthDate.getFullYear();
+  var m = today.getMonth() - birthDate.getMonth();
+  if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())){
+    age--;
+  }
+  return age;
+}
+
+  // height : searching function
+ function getHeight(people){  
+  let userChoice = promptFor("What is the person's height in inches?",integers);
+  let foundPeople = people.filter(function(el){
+    if(el.height == userChoice){
+      return true;
+    }});
+  if(foundPeople=== undefined || foundPeople.length ===0){
+    noResults();
+    return app(people);
+  }
+  return foundPeople;
+}
+
+  
+// weight : searching function
+ function getWeight(people){ 
+  let userChoice = promptFor("What is the person's weight?",integers);
+  let foundPeople = people.filter(function(el){
+    if(el.weight == userChoice){
+      return true;
+    }});
+  if(foundPeople=== undefined || foundPeople.length ===0){
+    noResults();
+    return app(people);
+  }
+  return foundPeople;
+}
+
+//eye color :  searching function  
+ function getEyes(people){
+  let userChoice = promptFor("What is the person's eye color?",chars);
+  let foundPeople = people.filter(function(el){
+    if(el.eyeColor == userChoice){
+      return true;
+    }});
+  if(foundPeople=== undefined || foundPeople.length ===0){
+    noResults();
+    return app(people);
+  }
+  return foundPeople;
+}
+
+//occupation : searching function  
+ function getOccupation(people){
+  let userChoice = promptFor("What is the person's occupation?",chars);
+  let foundPeople = people.filter(function(el){
+    if(el.occupation == userChoice){
+      return true;
+    }});
+  if(foundPeople=== undefined || foundPeople.length ===0){
+    noResults();
+    return app(people);
+  }
+  return foundPeople;
+}
+
+// gender : searching function 
+ function genderSearch(people){ 
+  let userChoice = promptFor("Is the person male or female?", validateGender);
+  let foundPeople = people.filter(function(el){
+    if(el.gender === userChoice) {      
+      return true;
+    }});
+    if(foundPeople === undefined|| foundPeople.length === 0){
+      noResults();
+      return app(people);
+    }
+   return foundPeople;
+}
