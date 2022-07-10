@@ -10,6 +10,8 @@
              ! TODO #3 : Asked Nevin's feedback , doesn't  print the entire text.
              ! TODO #4 : add lines of codes and fucntions for single traits but not tested yet
 
+ 7/9/2022 : 
+            ! TODO #3 : Asked Nevin's feedback , doesn't  print the entire text.
 
 //////////////////////////////////////////* Beginning Of Starter Code *//////////////////////////////////////////
 
@@ -89,7 +91,7 @@ function mainMenu(person, people) {
             let personFamily = findPersonFamily(person[0], people);
             console.log(personFamily);
             alert(personFamily);
-            
+          
         
             break;
         case "descendants":
@@ -97,8 +99,8 @@ function mainMenu(person, people) {
             // HINT: Review recursion lecture + demo for bonus user story
             let personDescendants = findPersonDescendants(person[0], people);
             console.log(personDescendants);
-            alert(personDescendants);
-            //alert(person[0].firstName + " " + person[0].lastName + "'s descendants: \n\n" + displayPeople(personDescendants));
+            // alert(personDescendants);
+            alert(person[0].firstName + " " + person[0].lastName + "'s descendants: \n\n" + displayPeople(findPersonDescendants(person[0], people)));
             break;
 
 
@@ -142,15 +144,15 @@ function searchByName(people) {
  * to the user in the form of an alert().
  * @param {Array} people        A collection of person objects.
  */
-function displayPeople(people) {
-    alert(
-        people
-            .map(function (person) {
-                return `${person.firstName} ${person.lastName}`;
-            })
-            .join("\n")
-    );
-}
+// function displayPeople(people) {
+//     alert(
+//         people
+//             .map(function (person) {
+//                 return `${person.firstName} ${person.lastName}`;
+//             })
+//             .join("\n")
+//     );
+// }
 // End of displayPeople()
 
 /**
@@ -306,168 +308,169 @@ function findPersonFamily (person, people) {
 
  
 
+   function displayPeople(people){
+    return people.map(function(person){
+      return person.firstName + " " + person.lastName;
+    }).join("\n");
+  }
+
+
+
+
+
+
 
   //! TODO #4: Declare a searchByTraits (multiple traits) function //////////////////////////////////////////
   //! TODO #4a: Provide option to search for single or multiple //////////////////////////////////////////
   // searchResults = searchByTraits(people);
 
- // single trait : gender , dob , height , weaigh , eye color , occupation 
+ // single trait : gender , dob , height , weaigh , eye color , occupation ,age
 
- function searchByTrait(people){    
-  let input = promptFor("Which trait would you like to search by?\n1: Gender\n2: Height\n3: Weight\n4: Eye Color\n5: Occupation\n6: DOB\n7: IDK Restart?",integers);
-  let foundPeople = [];
-  switch(input){
-    case"1"://gender           
-        foundPeople = genderSearch(people);     
-      break;
-    case "2"://DOB      
-      foundPeople = getAge(people);      
-      break;
-    case "3"://height      
-        foundPeople = getHeight(people);      
-      break;
-    case "4"://weight     
-        foundPeople = getWeight(people);      
-      break;
-    case "5"://eye color      
-        foundPeople = getEyes(people);      
-        break;
-    case "6"://occupation      
-        foundPeople = getOccupation(people);      
-        break;
-    
-    case "7"://restart
-        app(people); 
-        break;
-    default:
-      alert("Enter valid selection.");
-      return searchByTrait(people);
-  }
-    if (foundPeople.length > 1) {
-      displayPeople(foundPeople);
-      searchByTrait(foundPeople)
-    } else if (foundPeople.length === 1) {
-      let foundPerson = foundPeople[0];
-      mainMenu(foundPerson, people);
-    } else {
-      app(people);
-    }
+ 
+ 
+ function addAgeToObject(people) {
+  people = people.map(function(el){
+	   el.age = getAge(el.dob);
+	   return el;
+    });
+  return people;
 }
 
-
-
-
-
- // unversal function to prompt no result if criteria doesnt match for all below functions
- function noResults(){
-  alert("Could not find a trait match!");
- }
-
-
-
-
-
-
-
-
-
-
-
-
- // age : searching function  
- function getAge(people){
-  let userChoice = promptFor("What is the person's date of birth? \n Format: MM/DD/YYY",integers);
-    userChoice = ageFinder(userChoice);
-  let foundPeople = people.filter(function(el){
-    if(ageFinder(el.dob) == userChoice){
-      return true;
-    }});
-  if(foundPeople=== undefined || foundPeople.length ===0){
-    noResults();
-    return app(people);
-  }
-  return foundPeople;
-}
-
-//function : converts DOB into age integer.
- function ageFinder(dob){
-  var today = new Date();
-  var birthDate = new Date(dob);
-  var age = today.getFullYear() - birthDate.getFullYear();
-  var m = today.getMonth() - birthDate.getMonth();
-  if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())){
-    age--;
-  }
+function getAge(dateElement) {
+  var date1 = new Date(getCurrentDate());
+  var date2 = new Date(dateElement);
+  var timeDifference = Math.abs(date2.getTime() - date1.getTime());
+  var differentDays = Math.ceil(timeDifference / (1000 * 3600 * 24));
+  var age = Math.floor((differentDays / 365));
   return age;
 }
 
-  // height : searching function
- function getHeight(people){  
-  let userChoice = promptFor("What is the person's height in inches?",integers);
-  let foundPeople = people.filter(function(el){
-    if(el.height == userChoice){
-      return true;
-    }});
-  if(foundPeople=== undefined || foundPeople.length ===0){
-    noResults();
-    return app(people);
-  }
-  return foundPeople;
+function getCurrentDate() {
+  var date = new Date();
+  var currentDate = "";
+    currentDate += (date.getMonth() + 1) + "/";
+     currentDate += date.getDate() + "/";
+     currentDate += date.getFullYear();
+  return currentDate;
 }
 
-  
-// weight : searching function
- function getWeight(people){ 
-  let userChoice = promptFor("What is the person's weight?",integers);
-  let foundPeople = people.filter(function(el){
-    if(el.weight == userChoice){
-      return true;
-    }});
-  if(foundPeople=== undefined || foundPeople.length ===0){
-    noResults();
-    return app(people);
-  }
-  return foundPeople;
+
+function yesNo(input){
+  return input.toLowerCase() == "yes" || input.toLowerCase() == "no";
 }
 
-//eye color :  searching function  
- function getEyes(people){
-  let userChoice = promptFor("What is the person's eye color?",chars);
-  let foundPeople = people.filter(function(el){
-    if(el.eyeColor == userChoice){
-      return true;
-    }});
-  if(foundPeople=== undefined || foundPeople.length ===0){
-    noResults();
-    return app(people);
-  }
-  return foundPeople;
+function chars(input){
+  return true;
 }
 
-//occupation : searching function  
- function getOccupation(people){
-  let userChoice = promptFor("What is the person's occupation?",chars);
-  let foundPeople = people.filter(function(el){
-    if(el.occupation == userChoice){
+function searchByWeight(people) {
+  let userInputWeight = prompt("How much does the person weigh?");
+  let newArray = people.filter(function (el) {
+    if(el.weight == userInputWeight) {
       return true;
-    }});
-  if(foundPeople=== undefined || foundPeople.length ===0){
-    noResults();
-    return app(people);
-  }
-  return foundPeople;
-}
-
-// gender : searching function 
- function genderSearch(people){ 
-  let userChoice = promptFor("Is the person male or female?", validateGender);
-  let foundPeople = people.filter(function(el){
-    if(el.gender === userChoice) {      
-      return true;
-    }});
-    if(foundPeople === undefined|| foundPeople.length === 0){
-      noResults();
-      return app(people);
     }
-   return foundPeople;
+  });
+
+  return newArray;
 }
+
+function searchByOccupation(people){
+  let userInputOccupation = prompt("What is the person's occupation?").toLowerCase();
+  let newArray = people.filter(function (el) {
+    if(el.occupation == userInputOccupation) {
+      return true;
+    }
+  });
+
+  return newArray;
+}
+
+function searchByHeight(people){
+  let userInputHeight = prompt("What is the person's height?");
+  let newArray = people.filter(function (el) {
+    if(el.height == userInputHeight) {
+      return true;
+    }
+  });
+
+  return newArray;
+}
+
+function searchByEyeColor(people){
+  let userInputEyeColor = prompt("What is the person's eye color?");
+  let newArray = people.filter(function (el) {
+    if(el.eyeColor == userInputEyeColor) {
+      return true;
+    }
+  });
+  return newArray;
+}
+
+function searchByGender(people){
+  let userInputGender = prompt("What is the person's gender?");
+  let newArray = people.filter(function (el) {
+    if(el.gender == userInputGender) {
+      return true;
+    }
+  });
+  return newArray;
+  }
+
+function searchByAge(people){
+  let userInputAge = prompt("What is the person's age?");
+  let newArray = people.filter(function (el) {
+    if(el.age == userInputAge) {
+      return true;
+    }
+  });
+
+  return newArray;
+}
+
+function searchByTraits(people) {
+  let userSearchChoice = prompt("What would you like to search by? 'height', 'weight', 'eye color', 'gender', 'age', 'occupation'.").toLowerCase();
+  let filteredPeople;
+  let foundPerson;
+  switch(userSearchChoice) {
+     case "height":
+       filteredPeople = searchByHeight(people);
+       alert(displayPeople(filteredPeople));
+       break;
+     case "weight":
+       filteredPeople = searchByWeight(people);
+       alert(displayPeople(filteredPeople));
+       break;
+     case "eye color":
+       filteredPeople = searchByEyeColor(people);
+       alert(displayPeople(filteredPeople));
+       break;
+     case "gender":
+       filteredPeople = searchByGender(people);
+       alert(displayPeople(filteredPeople));
+       break;
+     case "age":
+       filteredPeople = searchByAge(people);
+       alert(displayPeople(filteredPeople));
+       break;
+     case "occupation":
+       filteredPeople = searchByOccupation(people);
+       alert(displayPeople(filteredPeople));
+       break;
+     default:
+      alert("You entered an invalid search type! Please try again.");
+      searchByTraits(people);
+      break;
+  }
+    userSearchChoice = prompt("Would you like to filter the list further by another trait?");
+    if(userSearchChoice === "yes"){
+      searchByTraits(filteredPeople, people);
+    }
+    if (userSearchChoice === "no" && filteredPeople.length === 1) {
+       foundPerson = filteredPeople[0];
+      mainMenu(foundPerson, people);
+    }
+    if (userSearchChoice === "no" && filteredPeople.length > 1) {
+       alert("We have narrowed it down to this group: \n\n"  + displayPeople(filteredPeople) +"\n\n We'll send you back to the start now to search any of these people by name.");
+       app(people);
+    }
+ }
