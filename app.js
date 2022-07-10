@@ -49,7 +49,7 @@ function app(people) {
             break;
     }
     // Calls the mainMenu() only AFTER we find the SINGLE PERSON
-    mainMenu(searchResults[0], people);
+    mainMenu(searchResults, people);
 }
 // End of app()
 
@@ -471,23 +471,7 @@ function ageFinder(dob){
   return age;
 }
  
- // function that prompts and validates user input
-function promptFor(question, valid){
-  do{
-    var response = prompt(question).trim();
-  } while(!response || !valid(response));
-  return response;
-}
-
-// helper function to pass into promptFor to validate yes/no answers
-function yesNo(input){
-  return input.toLowerCase() == "yes" || input.toLowerCase() == "no";
-}
-
-// helper function to pass in as default promptFor validation
-function chars(input){
-  return true; // default validation only
-}
+ 
 
 //Gender validation
 function validateGender(input){ 
