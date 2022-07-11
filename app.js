@@ -42,7 +42,15 @@ function app(people) {
       case "no":
           //! TODO #4: Declare a searchByTraits (multiple traits) function //////////////////////////////////////////
               //! TODO #4a: Provide option to search for single or multiple //////////////////////////////////////////
-          searchResults = searchBySingleTrait(people);
+              searchResults = searchBySingleTrait(people);
+              // input = promptFor( "Do you wnat single trait? Enter 'yes' or 'no'", yesNo ).toLowerCase();
+              // if (input == "yes"){
+              //   searchResults = searchBySingleTrait(people);}
+              // else {
+              //   searchResults = searchByMultipleTraits(people)
+              // };
+
+
           break;
       default:
           // Re-initializes the app() if neither case was hit above. This is an instance of recursion.
