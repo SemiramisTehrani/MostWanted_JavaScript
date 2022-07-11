@@ -218,7 +218,11 @@ function chars(input) {
 //////////////////////////////////////////* End Of Starter Code *//////////////////////////////////////////
 // Any additional functions can be written below this line 👇. Happy Coding! 😁
 
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // added by Semi
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //! TODO #2: Declare a findPersonFamily function ////////////////////////////////////////// --> is it supposed to be one function?
 //  findPersonFamily(person[0], people);
@@ -309,7 +313,7 @@ function findPersonFamily (person, people) {
 
    function displayPeople(people){
     return people.map(function(person){
-      return person.firstName + " " + person.lastName;
+      return person.firstName + " " + person.lastName+"\n";
     }).join("\n");
   }
 
@@ -325,16 +329,141 @@ function findPersonFamily (person, people) {
 
  // single trait : gender , dob , height , weaigh , eye color , occupation ,age
 
+
+
+ //Function : Integer validation 
+function integers(input){ 
+  if(parseInt(input)){
+    return true;
+  }
+  else{
+    return false;
+  }
+}
  
+//Function : Gender validation
+function validateGender(input){ 
+  return input.toLowerCase() == "male" || input.toLowerCase() == "female";
+}
+
+//function : search for gender
+function genderSearch(people){ 
+  let userChoice = promptFor("Is the person male or female?", validateGender);
+  let foundPeople = people.filter(function(el){
+    if(el.gender === userChoice) {      
+      return true;
+    }});
+    if(foundPeople === undefined|| foundPeople.length === 0){
+      noResults();
+      return app(people);
+    }
+   return foundPeople;
+}
+
+//Function : prompt no results if criteria doesnt match. 
+function noResults(){
+  alert("Could not find a trait match!");
+}
 
 
- //Function to search by single trait
+
+//function : serach for height
+function getHeight(people){  
+  let userChoice = promptFor("What is the person's height in inches?",integers);
+  let foundPeople = people.filter(function(el){
+    if(el.height == userChoice){
+      return true;
+    }});
+  if(foundPeople=== undefined || foundPeople.length ===0){
+    noResults();
+    return app(people);
+  }
+  return foundPeople;
+}
+
+//function : serach for weight
+function getWeight(people){ 
+  let userChoice = promptFor("What is the person's weight?",integers);
+  let foundPeople = people.filter(function(el){
+    if(el.weight == userChoice){
+      return true;
+    }});
+  if(foundPeople=== undefined || foundPeople.length ===0){
+    noResults();
+    return app(people);
+  }
+  return foundPeople;
+}
+
+//sfunction: search for eye color
+function getEyes(people){
+  let userChoice = promptFor("What is the person's eye color?",chars);
+  let foundPeople = people.filter(function(el){
+    if(el.eyeColor == userChoice){
+      return true;
+    }});
+  if(foundPeople=== undefined || foundPeople.length ===0){
+    noResults();
+    return app(people);
+  }
+  return foundPeople;
+}
+
+//function : search for occupation 
+function getOccupation(people){
+  let userChoice = promptFor("What is the person's occupation?",chars);
+  let foundPeople = people.filter(function(el){
+    if(el.occupation == userChoice){
+      return true;
+    }});
+  if(foundPeople=== undefined || foundPeople.length ===0){
+    noResults();
+    return app(people);
+  }
+  return foundPeople;
+}
+
+//sfunction : search for age
+function getAge(people){
+  let userChoice = promptFor("What is the person's date of birth? \n Format: MM/DD/YYY",integers);
+    userChoice = ageFinder(userChoice);
+  let foundPeople = people.filter(function(el){
+    if(ageFinder(el.dob) == userChoice){
+      return true;
+    }});
+  if(foundPeople=== undefined || foundPeople.length ===0){
+    noResults();
+    return app(people);
+  }
+  return foundPeople;
+}
+
+//function : converts DOB into age integer.
+function ageFinder(dob){
+  var today = new Date();
+  var birthDate = new Date(dob);
+  var age = today.getFullYear() - birthDate.getFullYear();
+  var m = today.getMonth() - birthDate.getMonth();
+  if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())){
+    age--;
+  }
+  return age;
+}
+
+
+
+
+
+
+
+ //function : searchByTraits
 function searchByTraits(people){    
   let input = promptFor("Which trait would you like to search by?\n1: Gender\n2: Height\n3: Weight\n4: Eye Color\n5: Occupation\n6: DOB\n7: IDK Restart?",integers);
   let foundPeople = [];
   switch(input){
     case"1"://gender           
-        foundPeople = genderSearch(people);     
+        foundPeople = genderSearch(people);
+        console.log(foundPeople)     
       break;
     case "2"://height      
         foundPeople = getHeight(people);      
@@ -359,131 +488,13 @@ function searchByTraits(people){
       return searchByTraits(people);
   }
     if (foundPeople.length > 1) {
-      displayPeople(foundPeople);
+      alert("Search Result :" + displayPeople(foundPeople));
       searchByTraits(foundPeople)
-    } else if (foundPeople.length === 1) {
+     } else if (foundPeople.length === 1) {
       let foundPerson = foundPeople[0];
-      mainMenu(foundPerson, people);
-    } else {
-      app(people);
-    }
-}
-
-//Function to prompt no results if criteria doesnt match. 
-function noResults(){
-  alert("Could not find a trait match!");
-}
-
-//search function for gender
-function genderSearch(people){ 
-  let userChoice = promptFor("Is the person male or female?", validateGender);
-  let foundPeople = people.filter(function(el){
-    if(el.gender === userChoice) {      
-      return true;
-    }});
-    if(foundPeople === undefined|| foundPeople.length === 0){
-      noResults();
-      return app(people);
-    }
-   return foundPeople;
-}
-
-//search function for height
-function getHeight(people){  
-  let userChoice = promptFor("What is the person's height in inches?",integers);
-  let foundPeople = people.filter(function(el){
-    if(el.height == userChoice){
-      return true;
-    }});
-  if(foundPeople=== undefined || foundPeople.length ===0){
-    noResults();
-    return app(people);
-  }
-  return foundPeople;
-}
-
-//search function for weight
-function getWeight(people){ 
-  let userChoice = promptFor("What is the person's weight?",integers);
-  let foundPeople = people.filter(function(el){
-    if(el.weight == userChoice){
-      return true;
-    }});
-  if(foundPeople=== undefined || foundPeople.length ===0){
-    noResults();
-    return app(people);
-  }
-  return foundPeople;
-}
-
-//search function for eye color
-function getEyes(people){
-  let userChoice = promptFor("What is the person's eye color?",chars);
-  let foundPeople = people.filter(function(el){
-    if(el.eyeColor == userChoice){
-      return true;
-    }});
-  if(foundPeople=== undefined || foundPeople.length ===0){
-    noResults();
-    return app(people);
-  }
-  return foundPeople;
-}
-
-//search function for occupation 
-function getOccupation(people){
-  let userChoice = promptFor("What is the person's occupation?",chars);
-  let foundPeople = people.filter(function(el){
-    if(el.occupation == userChoice){
-      return true;
-    }});
-  if(foundPeople=== undefined || foundPeople.length ===0){
-    noResults();
-    return app(people);
-  }
-  return foundPeople;
-}
-
-//search function for age
-function getAge(people){
-  let userChoice = promptFor("What is the person's date of birth? \n Format: MM/DD/YYY",integers);
-    userChoice = ageFinder(userChoice);
-  let foundPeople = people.filter(function(el){
-    if(ageFinder(el.dob) == userChoice){
-      return true;
-    }});
-  if(foundPeople=== undefined || foundPeople.length ===0){
-    noResults();
-    return app(people);
-  }
-  return foundPeople;
-}
-
-//function that converts DOB into age integer.
-function ageFinder(dob){
-  var today = new Date();
-  var birthDate = new Date(dob);
-  var age = today.getFullYear() - birthDate.getFullYear();
-  var m = today.getMonth() - birthDate.getMonth();
-  if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())){
-    age--;
-  }
-  return age;
-}
- 
- 
-
-//Gender validation
-function validateGender(input){ 
-  return input.toLowerCase() == "male" || input.toLowerCase() == "female";
-}
-
-//Integer validation 
-function integers(input){ 
-  if(parseInt(input)){
-    return true;
-  }
-  else{
-    return false;
-  }
+      alert("oops! no result , try again");
+       mainMenu(foundPerson, people);
+     } else {
+       app(people);
+     }
 }
