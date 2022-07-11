@@ -488,7 +488,7 @@ function searchByTraits(people){
       return searchByTraits(people);
   }
     if (foundPeople.length > 1) {
-      alert("Search Result :" + displayPeople(foundPeople));
+      alert("Search Result : \n\n" + displayPeople(foundPeople));
       searchByTraits(foundPeople)
      } else if (foundPeople.length === 1) {
       let foundPerson = foundPeople[0];
