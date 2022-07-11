@@ -8,7 +8,7 @@
 /            ! TODO #1 : added lines in Function displayPerson , tested & is workin to provide all person's info
              ! TODO #2 : Nevin helped with fixing bugs in findPersonFamily function and nested functions , tested & working.
              ! TODO #3 : Asked Nevin's feedback , doesn't  print the entire text.
-             ! TODO #4 : add lines of codes and fucntions for single traits but not tested yet
+             ! TODO #4 : add lines of codes and fucntions for single trait but not tested yet
 
  7/9/2022 : 
             ! TODO #3 : Asked Nevin's feedback , doesn't  print the entire text.
@@ -29,31 +29,30 @@
 function app(people) {
     // promptFor() is a custom function defined below that helps us prompt and validate input more easily
     // Note that we are chaining the .toLowerCase() immediately after the promptFor returns its value
-    let searchType = promptFor("Do you know the name of the person you are looking for? Enter 'yes' or 'no'or", yesNo).toLowerCase();
-    let searchResults;
-    // Routes our application based on the user's input
-    switch (searchType) {
-        case "yes":
-            searchResults = searchByName(people);
-            break;
-        
-        case "no":
-            //! TODO #4: Declare a searchByTraits (multiple traits) function //////////////////////////////////////////
-                //! TODO #4a: Provide option to search for single or multiple //////////////////////////////////////////
-            searchResults = searchByTraits(people);
-            break;
-
-        default:
-            // Re-initializes the app() if neither case was hit above. This is an instance of recursion.
-            app(people);   // Semi : restart the app
-            break;
-    }
-    // Calls the mainMenu() only AFTER we find the SINGLE PERSON
-    mainMenu(searchResults, people);
+    let searchType = promptFor(
+      "Do you know the name of the person you are looking for? Enter 'yes' or 'no'",
+      yesNo
+  ).toLowerCase();
+  let searchResults;
+  // Routes our application based on the user's input
+  switch (searchType) {
+      case "yes":
+          searchResults = searchByName(people);
+          break;
+      case "no":
+          //! TODO #4: Declare a searchByTraits (multiple traits) function //////////////////////////////////////////
+              //! TODO #4a: Provide option to search for single or multiple //////////////////////////////////////////
+          searchResults = searchBySingleTrait(people);
+          break;
+      default:
+          // Re-initializes the app() if neither case was hit above. This is an instance of recursion.
+          app(people);
+          break;
+  }
+  // Calls the mainMenu() only AFTER we find the SINGLE PERSON
+  mainMenu(searchResults, people);
 }
 // End of app()
-
-
 
 
 /**
@@ -423,7 +422,7 @@ function getOccupation(people){
   return foundPeople;
 }
 
-//sfunction : search for age
+//function : search for age
 function getAge(people){
   let userChoice = promptFor("What is the person's date of birth? \n Format: MM/DD/YYY",integers);
     userChoice = ageFinder(userChoice);
@@ -457,7 +456,7 @@ function ageFinder(dob){
 
 
  //function : searchByTraits
-function searchByTraits(people){    
+function searchBySingleTrait(people){    
   let input = promptFor("Which trait would you like to search by?\n1: Gender\n2: Height\n3: Weight\n4: Eye Color\n5: Occupation\n6: DOB\n7: IDK Restart?",integers);
   let foundPeople = [];
   switch(input){
@@ -485,11 +484,11 @@ function searchByTraits(people){
         break;
     default:
       alert("Enter valid selection.");
-      return searchByTraits(people);
+      return searchBySingleTrait(people);
   }
     if (foundPeople.length > 1) {
       alert("Search Result : \n\n" + displayPeople(foundPeople));
-      searchByTraits(foundPeople)
+      searchBySingleTrait(foundPeople)
      } else if (foundPeople.length === 1) {
       let foundPerson = foundPeople[0];
       alert("oops! no result , try again");
@@ -498,3 +497,97 @@ function searchByTraits(people){
        app(people);
      }
 }
+
+
+
+
+
+function searchByMultipleTraits(people) {
+  let traits = getSearchTraits("x");
+  let traitValues = getTraitValues(traits);
+  let results = people;
+  for (const key in traitValues) {
+      results = searchTrait(key, traitValues[key], results);
+  }
+  return results;
+  }
+
+
+  function getSearchTraits(qty) {
+    const message = `
+    Type the number of the trait you wish to by 
+    Type one at a time and press enter:
+      1 - Gender
+      2 - Date of Birth
+      3 - Height
+      4 - Weight
+      5 - Eye Color
+      6 - Occupation
+      7 - DONE`;
+    let traits = [];
+    let input;
+    while (input != 7) {
+      input = promptFor(message, validateTraitNumbers);
+      if (!traits.includes(input) && input != 7) {
+        traits.push(input);
+      }
+      if (qty == 1) {
+        input = 7;
+      }
+    }
+    return traits.sort((a, b) => a - b);
+  }
+
+  function getTraitValues(arr) {
+    let keys = {
+      0: "gender",
+      1: "dob",
+      2: "height",
+      3: "weight",
+      4: "eyeColor",
+      5: "occupation",
+    };
+    let values = {};
+    for (let i = 0; i < arr.length; i++) {
+      const message = `Enter the value for ${keys[arr[i] - 1]}`;
+      let value = promptFor(message, autoValid);
+      switch (arr[i]) {
+        case "1":
+          values.gender = value;
+          break;
+        case "2":
+          values.dob = value;
+          break;
+        case "3":
+          values.height = value;
+          break;
+        case "4":
+          values.weight = value;
+          break;
+        case "5":
+          values.eyeColor = value;
+          break;
+        case "6":
+          values.occupation = value;
+          break;
+        default:
+          break;
+      }
+    }
+    return values;
+  }
+
+  function searchTrait(trait, input, people) {
+    let filterArray = people.filter(function (object) {
+      if (String(object[trait]) === String(input)) {
+        return true;
+      } else if (Array.isArray(object[trait])) {
+        if (object[trait].includes(parseInt(input))) {
+          return true;
+        }
+      } else {
+        return false;
+      }
+    });
+    return filterArray;
+  }
