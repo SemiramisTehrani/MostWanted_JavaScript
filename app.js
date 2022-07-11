@@ -498,9 +498,10 @@ function searchBySingleTrait(people){
       alert("Search Result : \n\n" + displayPeople(foundPeople));
       searchBySingleTrait(foundPeople)
      } else if (foundPeople.length === 1) {
-      let foundPerson = foundPeople[0];
-      alert("oops! no result , try again");
-       mainMenu(foundPerson, people);
+      // let foundPerson = foundPeople[0];                *Pascal's input : to remove following lines
+      alert(foundPeople);            
+      //  mainMenu(foundPeople, people);
+      return foundPeople
      } else {
        app(people);
      }
