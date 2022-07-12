@@ -12,6 +12,13 @@
 
  7/9/2022 : 
             ! TODO #3 : Asked Nevin's feedback , doesn't  print the entire text.
+  7/10/2022 : 
+            ! TODO #3 : works
+             TODO #4  : finally working
+
+  7/11/2022 : 
+            code clean up
+
 
 //////////////////////////////////////////* Beginning Of Starter Code *//////////////////////////////////////////
 
@@ -506,97 +513,3 @@ function searchBySingleTrait(people){
        app(people);
      }
 }
-
-
-
-
-
-function searchByMultipleTraits(people) {
-  let traits = getSearchTraits("x");
-  let traitValues = getTraitValues(traits);
-  let results = people;
-  for (const key in traitValues) {
-      results = searchTrait(key, traitValues[key], results);
-  }
-  return results;
-  }
-
-
-  function getSearchTraits(qty) {
-    const message = `
-    Type the number of the trait you wish to by 
-    Type one at a time and press enter:
-      1 - Gender
-      2 - Date of Birth
-      3 - Height
-      4 - Weight
-      5 - Eye Color
-      6 - Occupation
-      7 - DONE`;
-    let traits = [];
-    let input;
-    while (input != 7) {
-      input = promptFor(message, validateTraitNumbers);
-      if (!traits.includes(input) && input != 7) {
-        traits.push(input);
-      }
-      if (qty == 1) {
-        input = 7;
-      }
-    }
-    return traits.sort((a, b) => a - b);
-  }
-
-  function getTraitValues(arr) {
-    let keys = {
-      0: "gender",
-      1: "dob",
-      2: "height",
-      3: "weight",
-      4: "eyeColor",
-      5: "occupation",
-    };
-    let values = {};
-    for (let i = 0; i < arr.length; i++) {
-      const message = `Enter the value for ${keys[arr[i] - 1]}`;
-      let value = promptFor(message, autoValid);
-      switch (arr[i]) {
-        case "1":
-          values.gender = value;
-          break;
-        case "2":
-          values.dob = value;
-          break;
-        case "3":
-          values.height = value;
-          break;
-        case "4":
-          values.weight = value;
-          break;
-        case "5":
-          values.eyeColor = value;
-          break;
-        case "6":
-          values.occupation = value;
-          break;
-        default:
-          break;
-      }
-    }
-    return values;
-  }
-
-  function searchTrait(trait, input, people) {
-    let filterArray = people.filter(function (object) {
-      if (String(object[trait]) === String(input)) {
-        return true;
-      } else if (Array.isArray(object[trait])) {
-        if (object[trait].includes(parseInt(input))) {
-          return true;
-        }
-      } else {
-        return false;
-      }
-    });
-    return filterArray;
-  }
